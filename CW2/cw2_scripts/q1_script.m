@@ -27,7 +27,8 @@ planar4Rrobot = SerialLink([L1, L2, L3, L4]);
 
 % Inverse kinematics - CCD
 tic;
-theta_CCD = inverse_kine_CCD(planar_traj, planar4Rrobot); 
+% theta_CCD = inverse_kine_CCD(planar_traj, planar4Rrobot); 
+theta_CCD = zeros(number_of_data, 4);
 cost_CCD = toc;
 
 % Inverse kinematics - Iterative method
@@ -41,19 +42,19 @@ theta_ikine = zeros(number_of_data, 4); %Comment this line
 
 planar_traj4D = zeros(4,4,size(planar_traj,1));
 
-q0 =[0 0 0 0];
-mask = [1 1 1 0 0 0];
-
-for i = 1:size(planar_traj,1)
-    col = [planar_traj(i,:), 0, 1]';
-    temp = [1 0 0; 0 1 0; 0 0 1; 0 0 0];
-    temp = [temp, col];
-    planar_traj4D = temp;
-    
-    
+% q0 =[0 0 0 0];
+% mask = [1 1 1 0 0 0];
+% 
+% for i = 1:size(planar_traj,1)
+%     col = [planar_traj(i,:), 0, 1]';
+%     temp = [1 0 0; 0 1 0; 0 0 1; 0 0 0];
+%     temp = [temp, col];
+%     planar_traj4D = temp;
+%     
+%     
 %     theta_ikine(i,:) = planar4Rrobot.ikine(planar_traj4D, q0, mask, 'alpha', 0.005, 'tol', 0.5);
-    q0(1) = theta_ikine(i,1);
-end
+%     q0(1) = theta_ikine(i,1);
+% end
     
 
 
@@ -79,17 +80,17 @@ figure(1)
 plot3(planar_traj(:, 1), planar_traj(:, 2), zeros(number_of_data, 1));
 view(0, 90);
 hold on
-planar4Rrobot.plot(theta_CCD, 'trail', 'r-')
+planar4Rrobot.plot(theta_CCD, 'trail', 'r-', 'delay', 0.01)
 hold off
 
-% disp('Printing trajectory for jacobian method....');
-% %Plot the desired path and expected path together.
-% figure(2)
-% plot3(planar_traj(:, 1), planar_traj(:, 2), zeros(number_of_data, 1));
-% view(0, 90);
-% hold on
-% planar4Rrobot.plot(theta_jacob, 'trail', 'r-')
-% hold off
+disp('Printing trajectory for jacobian method....');
+%Plot the desired path and expected path together.
+figure(2)
+plot3(planar_traj(:, 1), planar_traj(:, 2), zeros(number_of_data, 1));
+view(0, 90);
+hold on
+planar4Rrobot.plot(theta_jacob, 'trail', 'r-', 'delay', 0.01)
+hold off
 
 disp('Printing trajectory for ikine method....');
 %Plot the desired path and expected path together.
@@ -97,7 +98,7 @@ figure(3)
 plot3(planar_traj(:, 1), planar_traj(:, 2), zeros(number_of_data, 1));
 view(0, 90);
 hold on
-planar4Rrobot.plot(theta_ikine, 'trail', 'r-')
+planar4Rrobot.plot(theta_ikine, 'trail', 'r-', 'delay', 0.01)
 hold off
 
 %Plot error
