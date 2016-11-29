@@ -51,7 +51,7 @@ for i = 1:size(planar_traj,1)
     planar_traj4D = temp;
     
     
-    theta_ikine(i,:) = planar4Rrobot.ikine(planar_traj4D, q0, mask, 'alpha', 0.005, 'tol', 0.5);
+%     theta_ikine(i,:) = planar4Rrobot.ikine(planar_traj4D, q0, mask, 'alpha', 0.005, 'tol', 0.5);
     q0(1) = theta_ikine(i,1);
 end
     
@@ -73,15 +73,15 @@ T_EST_ikine = planar4Rrobot.fkine(theta_ikine);
 [ERROR_jacob, ~] = calculate_pose_error(T_EST_jacob, planar_traj);
 [ERROR_ikine, ~] = calculate_pose_error(T_EST_ikine, planar_traj);
 
-% disp('Printing trajectory for CCD method....');
-% %Plot the desired path and expected path together.
-% figure(1)
-% plot3(planar_traj(:, 1), planar_traj(:, 2), zeros(number_of_data, 1));
-% view(0, 90);
-% hold on
-% planar4Rrobot.plot(theta_CCD, 'trail', 'r-')
-% hold off
-% 
+disp('Printing trajectory for CCD method....');
+%Plot the desired path and expected path together.
+figure(1)
+plot3(planar_traj(:, 1), planar_traj(:, 2), zeros(number_of_data, 1));
+view(0, 90);
+hold on
+planar4Rrobot.plot(theta_CCD, 'trail', 'r-')
+hold off
+
 % disp('Printing trajectory for jacobian method....');
 % %Plot the desired path and expected path together.
 % figure(2)
