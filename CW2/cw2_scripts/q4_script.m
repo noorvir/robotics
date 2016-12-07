@@ -22,7 +22,7 @@ ERROR_ikine = zeros(2, number_of_data);
 L1 = Link('d', 0.147, 'a', 0, 'alpha', pi/2, 'qlim', [deg2rad(-169) deg2rad(169)]);
 L2 = Link('d', 0, 'a', 0.155, 'alpha', 0, 'offset', pi/2, 'qlim', [deg2rad(-65) deg2rad(90)]);
 L3 = Link('d', 0, 'a', 0.135, 'alpha', 0, 'qlim', [deg2rad(-151) deg2rad(146)]);
-L4 = Link('d', 0, 'a', 0, 'alpha', -pi/2, 'offset', pi/2, 'qlim', [deg2rad(-102.5) deg2rad(102.5)]);
+L4 = Link('d', 0, 'a', 0, 'alpha', pi/2, 'offset', pi/2, 'qlim', [deg2rad(-102.5) deg2rad(102.5)]);
 L5 = Link('d', 0.218, 'a', 0, 'alpha', 0, 'qlim', [deg2rad(-167.5) deg2rad(167.5)]);
 
 %Construct the robot
@@ -30,7 +30,7 @@ Youbot = SerialLink([L1, L2, L3, L4, L5]);
 
 % Inverse kinematics - Closed form method
 tic;
-theta_closedform = inverse_kine_closedform(youbot_traj, Youbot, 'q4');
+theta_closedform = zeros(number_of_data, 5); %inverse_kine_closedform(youbot_traj, Youbot, 'q4');
 cost_closedform = toc;
 
 % Inverse kinematics - Iterative method
@@ -40,7 +40,8 @@ cost_jacob = toc;
 
 % Inverse kinematics - Iterative method (Peter Corke's toolbox)
 tic;
-theta_ikine = zeros(number_of_data, 5); %Comment this line
+% theta_ikine = zeros(number_of_data, 5); %Comment this line
+theta_ikine = inverse_kine_jacobian(youbot_traj, Youbot, 'q4');
 cost_ikine = toc;
 
 T_EST_closedform = Youbot.fkine(theta_closedform);
@@ -56,10 +57,10 @@ T_EST_ikine = Youbot.fkine(theta_ikine);
 disp('Printing trajectory for closed form method....');
 %Plot the desired path and expected path together. (jacobian)
 figure(1)
-plot3(youbot_traj(:, 1), youbot_traj(:, 2), youbot_traj(:, 3));
+% plot3(youbot_traj(:, 1), youbot_traj(:, 2), youbot_traj(:, 3));
 view(0, 90);
 hold on
-Youbot.plot(theta_closedform, 'trail', 'r-')
+% Youbot.plot(theta_closedform, 'trail', 'r-')
 hold off
 
 disp('Printing trajectory for Jacobian method....');
