@@ -41,8 +41,7 @@ cost_jacob = toc;
 
 % Inverse kinematics - Iterative method (Peter Corke's toolbox)
 tic;
-% theta_ikine = zeros(number_of_data, 5); %Comment this line
-theta_ikine = inverse_kine_jacobian(youbot_traj, Youbot, 'q4');
+theta_ikine = zeros(size(youbot_traj,1), 5);%inverse_kine_PCRT(youbot_traj, Youbot, 'q4');
 cost_ikine = toc;
 
 T_EST_closedform = Youbot.fkine(theta_closedform);
@@ -67,10 +66,10 @@ hold off
 disp('Printing trajectory for Jacobian method....');
 %Plot the desired path and expected path together. (jacobian)
 figure(2)
-% plot3(youbot_traj(:, 1), youbot_traj(:, 2), youbot_traj(:, 3));
+plot3(youbot_traj(:, 1), youbot_traj(:, 2), youbot_traj(:, 3));
 view(0, 90);
 hold on
-Youbot.plot(theta_jacob, 'trail', 'r-')
+% Youbot.plot(theta_jacob, 'trail', 'r-')
 hold off
 
 disp('Printing trajectory for ikine method....');
@@ -79,7 +78,7 @@ figure(3)
 plot3(youbot_traj(:, 1), youbot_traj(:, 2), youbot_traj(:, 3));
 view(0, 90);
 hold on
-Youbot.plot(theta_ikine, 'trail', 'r-')
+% Youbot.plot(theta_ikine, 'trail', 'r-')
 hold off
 
 %Plot error
@@ -94,6 +93,6 @@ plot(1:number_of_data, ERROR_closedform(2, :), 'r:', 1:number_of_data, ERROR_jac
 title('Rotation error between estimation and ground truth'), grid on,
 xlabel('data number'), ylabel('error (deg)'), legend('Closed form', 'Jacobian', 'Robotics Toolbox Solver')
 
-fprintf('Computational cost of Jacobian method: %.4f, Average error (translation): %.4f, Average error (rotation): %.4f\n', cost_closedform, mean(ERROR_closedform(1, :)), mean(ERROR_closedform(2, :)));
+fprintf('Computational cost of closed form method: %.4f, Average error (translation): %.4f, Average error (rotation): %.4f\n', cost_closedform, mean(ERROR_closedform(1, :)), mean(ERROR_closedform(2, :)));
 fprintf('Computational cost of Jacobian method: %.4f, Average error (translation): %.4f, Average error (rotation): %.4f\n', cost_jacob, mean(ERROR_jacob(1, :)), mean(ERROR_jacob(2, :)));
 fprintf('Computational cost of ikine function: %.4f, Average error (translation): %.4f, Average error (rotation): %.4f\n', cost_ikine, mean(ERROR_ikine(1, :)), mean(ERROR_ikine(2, :)));
