@@ -30,7 +30,8 @@ Youbot = SerialLink([L1, L2, L3, L4, L5]);
 
 % Inverse kinematics - Closed form method
 tic;
-theta_closedform = zeros(number_of_data, 5); %inverse_kine_closedform(youbot_traj, Youbot, 'q4');
+% theta_closedform = zeros(number_of_data, 5); 
+theta_closedform = inverse_kine_closedform(youbot_traj, Youbot, 'q4');
 cost_closedform = toc;
 
 % Inverse kinematics - Iterative method
@@ -57,7 +58,7 @@ T_EST_ikine = Youbot.fkine(theta_ikine);
 disp('Printing trajectory for closed form method....');
 %Plot the desired path and expected path together. (jacobian)
 figure(1)
-% plot3(youbot_traj(:, 1), youbot_traj(:, 2), youbot_traj(:, 3));
+plot3(youbot_traj(:, 1), youbot_traj(:, 2), youbot_traj(:, 3));
 view(0, 90);
 hold on
 % Youbot.plot(theta_closedform, 'trail', 'r-')
@@ -66,7 +67,7 @@ hold off
 disp('Printing trajectory for Jacobian method....');
 %Plot the desired path and expected path together. (jacobian)
 figure(2)
-plot3(youbot_traj(:, 1), youbot_traj(:, 2), youbot_traj(:, 3));
+% plot3(youbot_traj(:, 1), youbot_traj(:, 2), youbot_traj(:, 3));
 view(0, 90);
 hold on
 Youbot.plot(theta_jacob, 'trail', 'r-')
