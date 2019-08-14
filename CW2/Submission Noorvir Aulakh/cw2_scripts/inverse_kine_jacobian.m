@@ -12,7 +12,6 @@ function theta = inverse_kine_jacobian(desired_traj, robot, use_CF_q4, option)
     
     fprintf('Calculating inverse kinematic soltion: Jacobian Method... \n');
     
-    limit_angles = true;
     [M, N] = size(desired_traj);
     
     % Tolerance for break condition of solver in meters
@@ -45,13 +44,6 @@ function theta = inverse_kine_jacobian(desired_traj, robot, use_CF_q4, option)
             % Convert pose into homogenous transformation matrix
             rot = rodrigues(pose(4:6));
             eeCoords = [rot, pose(1:3)'; [0 0 0 1]];
-            
-            % Joint limits array
-            limits =    [deg2rad(-169) deg2rad(169);
-                          deg2rad(-65) deg2rad(90);
-                          deg2rad(-151) deg2rad(146);
-                          deg2rad(-102.5) deg2rad(102.5);
-                          deg2rad(-167.5) deg2rad(167.5);];
         
         % Question 6
         elseif (strcmp(option, 'qextra'))
@@ -63,13 +55,6 @@ function theta = inverse_kine_jacobian(desired_traj, robot, use_CF_q4, option)
             rot = rodrigues(pose(4:6));
             eeCoords = [rot, pose(1:3)'; [0 0 0 1]];
             
-            % Joint limits array
-            limits =    [deg2rad(-169) deg2rad(169);
-                          deg2rad(-65) deg2rad(90);
-                          deg2rad(-151) deg2rad(146);
-                          deg2rad(-102.5) deg2rad(102.5);
-                          deg2rad(-167.5) deg2rad(167.5);];
-            
         end
 
         % Compute inverse transformation
@@ -79,31 +64,12 @@ function theta = inverse_kine_jacobian(desired_traj, robot, use_CF_q4, option)
                                                     tol,...
                                                     poseMask,...
                                                     use_CF_q4);
-        
-        % If limit_angles flag is set, maximum joint angle value will be
-        % limited to manipulator range
-        if limit_angles
-            
-            thetaOld = theta(tjPoint,:);
-            
-            if (strcmp(option, 'qextra') || strcmp(option, 'q4'))                                     
-                for jt = 1:robot.n
-                    [theta(tjPoint,jt),thetaF] =  checkJointLimits(theta(tjPoint,jt), jt, limits);
-                    
-                    % Display warning if joint angle had to be limited
-                    if thetaOld(jt) ~= theta(tjPoint,jt)
-                        fprintf('WARNING: Joint angle limit exceeded for joint %d . Angle forcefully limited to %3.3f . \n', jt, theta(tjPoint,jt));
-                    end
-                end 
-            end
-        end
         thetaInt = theta(tjPoint,:);
     end
-    
         
 end
 
 
-% t5 = atan2(r11* sin(t1) - r21*cos(t1), r12*sin(t1) - r22*cos(t1))
+
 
 

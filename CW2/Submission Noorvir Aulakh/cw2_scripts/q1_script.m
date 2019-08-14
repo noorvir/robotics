@@ -28,13 +28,12 @@ planar4Rrobot = SerialLink([L1, L2, L3, L4]);
 % Inverse kinematics - CCD
 tic;
 theta_CCD = inverse_kine_CCD(planar_traj, planar4Rrobot); 
-theta_CCD = zeros(number_of_data, 4);
+% theta_CCD = zeros(number_of_data, 4);
 cost_CCD = toc;
 
 % Inverse kinematics - Iterative method
 tic;
-% theta_jacob = inverse_kine_jacobian(planar_traj, planar4Rrobot, false, 'q1');
-theta_jacob = zeros(number_of_data, 4);
+theta_jacob = inverse_kine_jacobian(planar_traj, planar4Rrobot, false, 'q1');
 cost_jacob = toc;
 
 % Inverse kinematics - Iterative method (Peter Corke's toolbox)
